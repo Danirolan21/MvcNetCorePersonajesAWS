@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts{
+    <script>
+        $(document).ready(function()
+        {
+            $("#botonload").click(function()
+            {
+                let url = "https://98.81.143.27/api/Personajes";
+                $.get(url, function(data)
+                {
+                    var html = "";
+                    $.each(data, function(index, personaje)
+                    {
+                        html += "<li class='list-group-item'>";
+                        html += personaje.nombre;
+                        html += "<img src='" + personaje.imagen + "' style='width: 100px; height: 120px'/>";
+                        html += "</li>";
+                    })
+
+                    $("#capapersonajes").html(html);
+                })
+
+            })
+        })
+    </script>
+}
+
+<div class="text-center">
+    <h1>
+        Personajes AWS
+    </h1>
+    <button id="botonload" class="btn btn-info">
+        Cargar personajes
+    </button>
+    <ul class="list-group" id="capapersonajes">
+
+    </ul>
+</div>
