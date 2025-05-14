@@ -60,5 +60,65 @@ namespace MvcNetCorePersonajesAWS.Services
                 }
             }
         }
+
+        public async Task<Personaje> GetPersonaje(int id)
+        {
+            using (HttpClientHandler handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    string request = "api/personajes/" + id;
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(this.header);
+                    HttpResponseMessage response = await client.GetAsync(this.UrlApi + request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Personaje personaje = await response.Content.ReadAsAsync<Personaje>();
+                        return personaje;
+                    }
+                    else
+                        return null;
+                }
+            }
+        }
+
+        public async Task UpdatePersonajesAsync(int idpersonaje, string nombre, string imagen)
+        {
+            using (HttpClientHandler handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    string request = "api/personajes/" + idpersonaje;
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(this.header);
+                    Personaje personaje = new Personaje
+                    {
+                        IdPersonaje = idpersonaje,
+                        Nombre = nombre,
+                        Imagen = imagen
+                    };
+                    string json = JsonConvert.SerializeObject(personaje);
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = await client.PutAsync(this.UrlApi + request, content);
+                }
+            }
+        }
+
+        public async Task DeletePersonajesAsync(int id)
+        {
+            using (HttpClientHandler handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    string request = "api/personajes/" + id;
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(this.header);
+                    HttpResponseMessage response = await client.DeleteAsync(this.UrlApi + request);
+                }
+            }
+        }
     }
 }

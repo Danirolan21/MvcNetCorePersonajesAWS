@@ -27,5 +27,30 @@ namespace MvcNetCorePersonajesAWS.Controllers
             await this.service.CreatePersonajesAsync(personaje.Nombre, personaje.Imagen);
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            Personaje personaje = await this.service.GetPersonaje(id);
+            return View(personaje);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Personaje personaje = await this.service.GetPersonaje(id);
+            return View(personaje);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Personaje personaje)
+        {
+            await this.service.UpdatePersonajesAsync(personaje.IdPersonaje, personaje.Nombre, personaje.Imagen);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.service.DeletePersonajesAsync(id);
+            return RedirectToAction("Index");
+        }
     }
 }
